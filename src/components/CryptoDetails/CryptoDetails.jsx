@@ -20,6 +20,7 @@ import {
     useGetCryptoHistoryQuery,
 } from "../../services/cryptoApi";
 import LineChart from "../LineChart/LineChart";
+import Loader from "../Loader/Loader";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -29,15 +30,15 @@ const CryptoDetails = () => {
     const [timePeriod, setTimePeriod] = useState("7d");
 
     const { data } = useGetCryptoDetailsQuery(coinId);
-    const { data: coinHistory } = useGetCryptoHistoryQuery({
+    const { data: coinHistory, isFetching } = useGetCryptoHistoryQuery({
         coinId,
         timePeriod,
     });
     const cryptoDetails = data?.data?.coin;
 
-    if (!cryptoDetails) return <p>Loading...</p>;
+    if (!cryptoDetails) return <Loader />;
 
-    const time = ["3h", "24h", "7d", "30d", "1y", "3m", "3y", "5y"];
+    const time = ["24h", "7d", "30d", "1y", "5y"];
 
     const stats = [
         {
@@ -128,6 +129,7 @@ const CryptoDetails = () => {
                 className="select-timeperiod"
                 placeholder="Select Time Period"
                 onChange={val => setTimePeriod(val)}
+                loading={isFetching}
             >
                 {time.map(date => (
                     <Option key={date} value={date}>

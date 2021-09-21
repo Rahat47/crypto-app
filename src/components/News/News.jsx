@@ -1,9 +1,19 @@
-import { Select, Typography, Row, Col, Avatar, Card, Image } from "antd";
+import {
+    Select,
+    Typography,
+    Row,
+    Col,
+    Avatar,
+    Card,
+    Image,
+    Divider,
+} from "antd";
 import moment from "moment";
 import { useGetCryptoNewsQuery } from "../../services/cryptoNewsApi";
 import demoImg from "../../images/th.jpg";
 import { useState } from "react";
 import { useGetCryptosQuery } from "../../services/cryptoApi";
+import Loader from "../Loader/Loader";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -18,7 +28,7 @@ const News = ({ simplified }) => {
         count: simplified ? 6 : 12,
     });
 
-    if (!cryptoNews?.value) return <p>Loading...</p>;
+    if (!cryptoNews?.value) return <Loader />;
 
     return (
         <Row gutter={[24, 24]}>
@@ -34,7 +44,7 @@ const News = ({ simplified }) => {
                         }}
                         filterOption={(input, option) => {
                             return (
-                                option.props.children
+                                option.value
                                     .toLowerCase()
                                     .indexOf(input.toLowerCase()) >= 0
                             );
@@ -81,6 +91,7 @@ const News = ({ simplified }) => {
                                     : news.description}
                             </p>
 
+                            <Divider />
                             <div className="provider-container">
                                 <div>
                                     <Avatar
